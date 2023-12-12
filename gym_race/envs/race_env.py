@@ -1,6 +1,6 @@
-import gym
+import gymnasium as gym
 import numpy as np
-from gym import spaces
+from gymnasium import spaces
 
 from gym_race.envs.pyrace_2d import PyRace2D
 
@@ -11,7 +11,7 @@ class RaceEnv(gym.Env):
     def __init__(self):
         print("init")
         self.action_space = spaces.Discrete(3)
-        self.observation_space = spaces.Box(np.array([0, 0, 0, 0, 0]), np.array([10, 10, 10, 10, 10]), dtype=np.int)
+        self.observation_space = spaces.Box(np.array([0, 0, 0, 0, 0]), np.array([10, 10, 10, 10, 10]), dtype=np.int32)
         self.is_view = True
         self.pyrace = PyRace2D(self.is_view)
         self.memory = []
@@ -27,7 +27,7 @@ class RaceEnv(gym.Env):
         reward = self.pyrace.evaluate()
         done = self.pyrace.is_done()
         obs = self.pyrace.observe()
-        return obs, reward, done, {}
+        return obs, reward, done, False, {}
 
     def render(self, mode="human", close=False):
         if self.is_view:

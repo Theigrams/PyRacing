@@ -2,7 +2,7 @@ import math
 import random
 import sys
 
-import gym
+import gymnasium as gym
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -36,7 +36,8 @@ def simulate():
 
         for t in range(MAX_T):
             action = select_action(state_0, explore_rate)
-            obv, reward, done, _ = env.step(action)
+            obv, reward, terminated, truncated, _ = env.step(action)
+            done = terminated or truncated
             state = state_to_bucket(obv)
             env.remember(state_0, action, reward, state, done)
             total_reward += reward
