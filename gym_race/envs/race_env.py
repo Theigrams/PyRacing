@@ -1,10 +1,13 @@
 import gym
-from gym import spaces
 import numpy as np
+from gym import spaces
+
 from gym_race.envs.pyrace_2d import PyRace2D
 
+
 class RaceEnv(gym.Env):
-    metadata = {'render.modes' : ['human']}
+    metadata = {"render.modes": ["human"]}
+
     def __init__(self):
         print("init")
         self.action_space = spaces.Discrete(3)
