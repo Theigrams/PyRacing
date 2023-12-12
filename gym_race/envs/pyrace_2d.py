@@ -1,5 +1,7 @@
 import math
+import os
 
+import numpy as np
 import pygame
 
 screen_width = 1500
@@ -145,6 +147,8 @@ class Car:
 
 class PyRace2D:
     def __init__(self, is_render=True):
+        if not is_render:
+            os.environ["SDL_VIDEODRIVER"] = "dummy"
         pygame.init()
         self.screen = pygame.display.set_mode((screen_width, screen_height))
         self.clock = pygame.time.Clock()
@@ -172,12 +176,10 @@ class PyRace2D:
 
     def evaluate(self):
         reward = 0
-        """
         if self.car.check_flag:
             self.car.check_flag = False
             reward = 2000 - self.car.time_spent
             self.car.time_spent = 0
-        """
         if not self.car.is_alive:
             reward = -10000 + self.car.distance
 
@@ -201,7 +203,7 @@ class PyRace2D:
             ret[i] = int(r[1] / 20)
             i += 1
 
-        return ret
+        return np.array(ret, dtype=np.int32)
 
     def view(self):
         # draw game

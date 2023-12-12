@@ -6,7 +6,10 @@ from gym_race.envs.pyrace_2d import PyRace2D
 
 
 class RaceEnv(gym.Env):
-    metadata = {"render.modes": ["human"]}
+    metadata = {
+        "render_modes": ["human", "rgb_array"],
+        "render_fps": 60,
+    }
 
     def __init__(self):
         print("init")
@@ -16,11 +19,13 @@ class RaceEnv(gym.Env):
         self.pyrace = PyRace2D(self.is_view)
         self.memory = []
 
-    def reset(self):
+    def reset(self, seed=None, options=None):
+        if seed is not None:
+            np.random.seed(seed)
         del self.pyrace
         self.pyrace = PyRace2D(self.is_view)
         obs = self.pyrace.observe()
-        return obs
+        return obs, {}
 
     def step(self, action):
         self.pyrace.action(action)
