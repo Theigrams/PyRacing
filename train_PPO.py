@@ -5,10 +5,16 @@ import matplotlib.pyplot as plt
 import numpy as np
 import torch
 import torch.nn.functional as F
+
+# Virtual display
+from pyvirtualdisplay import Display
 from tqdm import tqdm
 
 import gym_race
 import rl_utils
+
+virtual_display = Display(visible=0, size=(1400, 900))
+virtual_display.start()
 
 
 def train_on_policy_agent(env, agent, num_episodes):
@@ -144,8 +150,8 @@ if __name__ == "__main__":
     lmbda = 0.95
     epochs = 10
     eps = 0.2
-    # device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
-    device = torch.device("cpu")
+    device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
+    # device = torch.device("cpu")
 
     env_name = "Pyrace-v0"
     env = gym.make(env_name)
