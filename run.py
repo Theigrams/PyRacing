@@ -43,15 +43,15 @@ NUM_EPISODES = 1
 for episode in range(NUM_EPISODES):
     state, info = env.reset()
     done = False
-    score = 0
+    episode_reward = 0
     for t in range(2000):
         action = take_action(actor, state)
         next_state, reward, terminated, truncated, _ = env.step(action)
-        done = terminated or truncated
-        score += reward
-        if done:
-            print("score: ", score)
+        episode_reward += reward
+        if terminated or truncated:
             break
         state = next_state
         env.render()
+    print("Reward:", episode_reward)
+    print("Steps:", t)
 env.close()

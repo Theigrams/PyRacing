@@ -2,15 +2,16 @@ import argparse
 
 import gymnasium as gym
 import numpy as np
-from pyvirtualdisplay import Display
+
+# from pyvirtualdisplay import Display
 from stable_baselines3 import PPO
 from stable_baselines3.common.callbacks import EvalCallback
 
 import gym_race
 
 # Virtual display
-virtual_display = Display(visible=0, size=(1400, 900))
-virtual_display.start()
+# virtual_display = Display(visible=0, size=(1400, 900))
+# virtual_display.start()
 
 
 if __name__ == "__main__":
@@ -22,9 +23,9 @@ if __name__ == "__main__":
     timesteps = args.timesteps
 
     env = gym.make("Pyrace-v0")
-    env.unwrapped.set_view(train_model)
 
     if train_model:
+        env.unwrapped.set_view(False)
         model = PPO(
             "MlpPolicy",
             env,
@@ -37,15 +38,16 @@ if __name__ == "__main__":
         model.learn(total_timesteps=timesteps, callback=eval_callback)
         model.save("ppo")
     else:
-        model = PPO.load("ppo", env=env)
+        env.unwrapped.set_view(True)
+        model = PPO.load("ppo", env=env, custom_objects={"env": env, "clip_range": 0.2, "lr_schedule": "linear"})
         obs, info = env.reset()
         episode_reward = 0
-        for i in range(2000):
-            env.render()
+        for t in range(2000):
             action, _ = model.predict(obs, deterministic=True)
             obs, reward, terminated, truncated, info = env.step(action)
             episode_reward += reward
             if terminated or truncated:
-                print("Reward:", episode_reward)
-                print("Steps:", i)
                 break
+            env.render()
+        print("Reward:", episode_reward)
+        print("Steps:", t)
