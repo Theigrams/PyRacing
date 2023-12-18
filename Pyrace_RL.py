@@ -17,7 +17,7 @@ def simulate():
     total_rewards = []
     training_done = False
     threshold = 1000
-    env.set_view(True)
+    env.set_view(False)
     for episode in range(NUM_EPISODES):
         total_rewards.append(total_reward)
         if episode == 50000:
@@ -27,7 +27,7 @@ def simulate():
             env.save_memory("50000")
             break
 
-        obv = env.reset()
+        obv, _ = env.reset()
         state_0 = state_to_bucket(obv)
         total_reward = 0
 
@@ -89,7 +89,7 @@ def load_and_play():
     env.set_view(True)
     reward_count = 0
     for episode in range(NUM_EPISODES):
-        obv = env.reset()
+        obv, _ = env.reset()
         state_0 = state_to_bucket(obv)
         total_reward = 0
         for t in range(MAX_T):
@@ -147,7 +147,7 @@ def load_and_simulate():
     # simulate
     env.set_view(False)
     for episode in range(NUM_EPISODES):
-        obv = env.reset()
+        obv, _ = env.reset()
         state_0 = state_to_bucket(obv)
         total_reward = 0
 
